@@ -1,35 +1,20 @@
-# Sử dụng hình ảnh PHP-FPM chứa PHP 8 trở lên
-FROM php:8-fpm
+FROM richarvey/nginx-php-fpm:2.0.4
 
-# Cài đặt các gói cần thiết
-RUN apt-get update && apt-get install -y \
-    libpng-dev \
-    libjpeg-dev \
-    libfreetype6-dev \
-    libzip-dev \
-    zip \
-    unzip \
-    && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install gd pdo pdo_mysql zip
+COPY . .
 
-# Cài đặt Composer
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+# Image config
+ENV SKIP_COMPOSER 1
+ENV WEBROOT /var/www/html/public
+ENV PHP_ERRORS_STDERR 1
+ENV RUN_SCRIPTS 1
+ENV REAL_IP_HEADER 1
 
-# Thiết lập thư mục làm việc
-WORKDIR /var/www/html
+# Laravel config
+ENV APP_ENV production
+ENV APP_DEBUG false
+ENV LOG_CHANNEL stderr
 
-# Sao chép mã nguồn Laravel vào hình ảnh
-COPY . /var/www/html
+# Allow composer to run as root
+ENV COMPOSER_ALLOW_SUPERUSER 1
 
-# Cài đặt các phụ thuộc PHP bằng Composer
-RUN composer global require hirak/prestissimo
-RUN composer install --no-dev --no-scripts
-
-# Tạo khóa ứng dụng (app key)
-RUN php artisan key:generate
-
-RUN php artisan migrate --force
-
-# Thiết lập quyền cho các tệp và thư mục Laravel
-RUN chown -R www-data:www-data /var/www/html \
-    && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
+CMD ["/start.sh"]
