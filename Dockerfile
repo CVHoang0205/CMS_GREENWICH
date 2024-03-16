@@ -22,6 +22,7 @@ WORKDIR /var/www/html
 COPY . /var/www/html
 
 # Cài đặt các phụ thuộc PHP bằng Composer
+RUN composer global require hirak/prestissimo
 RUN composer install --no-dev --no-scripts
 
 # Tạo khóa ứng dụng (app key)
@@ -32,16 +33,3 @@ RUN php artisan migrate --force
 # Thiết lập quyền cho các tệp và thư mục Laravel
 RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
-
-# Sử dụng hình ảnh nginx làm máy chủ web
-FROM nginx:alpine
-
-# Sao chép cấu hình Nginx vào hình ảnh
-COPY conf/nginx/nginx-site.conf /etc/nginx/nginx.conf
-
-
-# Expose cổng 80
-EXPOSE 80
-
-# Khởi động nginx
-CMD ["nginx", "-g", "daemon off;"]
