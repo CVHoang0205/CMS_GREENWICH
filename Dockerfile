@@ -39,8 +39,6 @@ FROM nginx:alpine
 # Sao chép cấu hình Nginx vào hình ảnh
 COPY conf/nginx/nginx-site.conf /etc/nginx/nginx.conf
 
-# Sao chép tệp index.html để Nginx có thể sử dụng mặc định
-COPY index.html /usr/share/nginx/html
 
 # Expose cổng 80
 EXPOSE 80
