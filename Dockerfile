@@ -37,7 +37,7 @@ RUN chown -R www-data:www-data /var/www/html \
 FROM nginx:alpine
 
 # Sao chép cấu hình Nginx vào hình ảnh
-COPY nginx.conf /etc/nginx/nginx.conf
+COPY conf/nginx/nginx-site.conf /etc/nginx/nginx.conf
 
 # Sao chép tệp index.html để Nginx có thể sử dụng mặc định
 COPY index.html /usr/share/nginx/html
