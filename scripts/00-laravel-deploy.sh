@@ -1,4 +1,3 @@
-@@ -0,0 +1,13 @@
 #!/usr/bin/env bash
 echo "Running composer"
 composer global require hirak/prestissimo
