@@ -17,7 +17,5 @@ ENV LOG_CHANNEL stderr
 # Allow composer to run as root
 ENV COMPOSER_ALLOW_SUPERUSER 1
 
-# Tạo khóa ứng dụng (app key)
-RUN php artisan key:generate
-
-RUN composer install --no-dev --no-scripts
+RUN composer global require hirak/prestissimo
+RUN composer install --no-dev --working-dir=/var/www/html
